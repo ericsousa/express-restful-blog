@@ -28,7 +28,7 @@ var Blog = new mongoose.model('Blog', blogSchema)
 // Blog.create({
 //   title: 'First blog post',
 //   image: 'https://images.pexels.com/photos/1972738/pexels-photo-1972738.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-//   body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+//   body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
 // }, function (err, newBlog) {
 //   if (err) {
 //     console.log('ERRO ', erro)
@@ -62,11 +62,16 @@ app.get('/blogs/new', function (req, res) {
 
 // CREATE ROUTE
 app.post('/blogs', function (req, res) {
+
   req.body.blog.body = req.sanitize(req.body.blog.body)
 
   Blog.create(req.body.blog, function (err, newBlog) {
-    if (err) redirect('/new')
-    else redirect('/')
+    if (err) {
+      res.redirect('new')
+    }
+    else {
+      res.redirect('/')
+    }
   })
 })
 
@@ -95,8 +100,7 @@ app.get('/blogs/:id/edit', function (req, res) {
 
 // UPDATE ROUTE
 app.put('/blogs/:id', function (req, res) {
-
-    // res.send('update blog put')
+  
     req.body.blog.req = req.sanitize(req.body.blog.req)
 
     Blog.findByIdAndUpdate(req.params.id, req.body.blog, function (err, blog) {
