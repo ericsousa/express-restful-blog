@@ -84,19 +84,40 @@ app.get('/blogs/:id', function (req, res) {
 
 // EDIT ROUTE
 app.get('/blogs/:id/edit', function (req, res) {
-
+  Blog.findById(req.params.id, function (err, blog) {
+    if (err) {
+      res.redirect('/blogs')
+    } else {
+      res.render('blog/edit', {blog: blog})
+    }
+  })
 })
 
 // UPDATE ROUTE
-app.put('blogs/:id', function (req, res) {
+app.put('/blogs/:id', function (req, res) {
 
+    // res.send('update blog put')
+    req.body.blog.req = req.sanitize(req.body.blog.req)
+
+    Blog.findByIdAndUpdate(req.params.id, req.body.blog, function (err, blog) {
+      if (err) {
+        res.redirect('/blogs')
+      } else {
+        res.redirect('/blogs')
+      }
+    })
 })
 
 // DELETE ROUTE
-app.delete('blogs/:id', function (req, res) {
-
+app.delete('/blogs/:id', function (req, res) {
+  Blog.findByIdAndRemove(req.params.id, function (err) {
+    if (err) {
+      res.redirect('/blogs')
+    } else {
+      res.redirect('/blogs')
+    }
+  }) 
 })
-
 
 
 // RUN SERVER ------------------------------------------------------
