@@ -13,7 +13,8 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(methodOverride('_method'))
 app.use(expressSanitizer())
 
-// MONGOOSE config and modeling
+// MONGOOSE config and modeling --------------------------------------
+
 mongoose.connect('mongodb://localhost/restful-blog2', {useNewUrlParser: true})
 
 var blogSchema = new mongoose.Schema({
@@ -36,11 +37,17 @@ var Blog = new mongoose.model('Blog', blogSchema)
 //   }
 // })
 
-// ROUNTE --------------------------------------------------------
+// ROUTES --------------------------------------------------------
 
 // HOME ROUTE
 app.get('/', function (req, res) {
-  res.redirect('/blogs')
+  Blog.find({}, function (err, blogs) {
+    if (err) {
+      console.log(err)
+    } else {
+      res.redirect('/blogs', {blogs: blogs})
+    }
+  })
 })
 
 // INDEX ROUTE
