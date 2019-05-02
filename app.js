@@ -73,6 +73,13 @@ app.post('/blogs', function (req, res) {
 // SHOW ROUTE
 app.get('/blogs/:id', function (req, res) {
 
+  Blog.findById(req.params.id, function (err, blog) {
+    if (err) {
+      res.redirect('/blogs')
+    } else {
+      res.render('blog/show', {blog: blog})
+    }
+  })
 })
 
 // EDIT ROUTE
