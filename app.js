@@ -20,8 +20,8 @@ mongoose.connect('mongodb://localhost/restful-blog2', {useNewUrlParser: true})
 var blogSchema = new mongoose.Schema({
   title: String,
   image: String,
-  content: String,
-  date: {type: Date, defaultl: Date.now}
+  body: String,
+  created: {type: Date, default: Date.now}
 })
 var Blog = new mongoose.model('Blog', blogSchema)
 
@@ -41,19 +41,18 @@ var Blog = new mongoose.model('Blog', blogSchema)
 
 // HOME ROUTE
 app.get('/', function (req, res) {
-  Blog.find({}, function (err, blogs) {
-    if (err) {
-      console.log(err)
-    } else {
-      res.redirect('/blogs', {blogs: blogs})
-    }
-  })
+  res.redirect('/blogs')
 })
 
 // INDEX ROUTE
 app.get('/blogs', function (req, res) {
-  res.render('blog/index')
-  
+  Blog.find({}, function (err, blogs) {
+    if (err) {
+      console.log(err)
+    } else {
+      res.render('blog/index', {blogs: blogs})
+    }
+  })
 })
 
 // NEW ROUTE
